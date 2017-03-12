@@ -1,0 +1,20 @@
+((*- extends 'article.tplx' -*))
+
+((* block input_group *))
+    ((*- if cell.metadata.get('nbconvert', {}).get('show_code', False) -*))
+        ((( super() )))
+    ((*- endif -*))
+((* endblock input_group *))
+((* block execute_result scoped *))
+    ((*- for type in output.data | filter_data_type -*))
+        ((*- if type in ['text/plain']*))
+\begin{Verbatim}[commandchars=\\\{\}]
+((( output.data['text/plain'] | escape_latex )))
+\end{Verbatim}
+        ((* else -*))
+            ((* block data_priority scoped *))
+            ((( super() )))
+            ((* endblock *))
+        ((*- endif -*))
+    ((*- endfor -*))
+((* endblock execute_result *))
